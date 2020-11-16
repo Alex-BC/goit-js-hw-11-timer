@@ -2,47 +2,57 @@ const refs = {
   days: document.querySelector('[data-value="days"]'),
   hours: document.querySelector('[data-value="hours"]'),
   mins: document.querySelector('[data-value="mins"]'),
-  secs: document.querySelector('[data-value="secs"]')
-}
+  secs: document.querySelector('[data-value="secs"]'),
+};
 
 class CountdownTimer {
-  
-  constructor({selector, targetDate}) {
+  constructor({ selector, targetDate }) {
     this.intervalId = null;
     this.selector = selector;
     this.targetDate = targetDate;
-   }
- 
+  }
 
-countTimer() {
+  countTimer() {
     const startTime = this.targetDate;
 
     this.intervalId = setInterval(() => {
-      const currentTime = Date.now()
-      const countTime = startTime - currentTime
-      const time = this.getTimeComponents(countTime)
-      updateClockface(time)
+      const currentTime = Date.now();
+      const countTime = startTime - currentTime;
+      const time = this.getTimeComponents(countTime);
+      updateClockface(time);
 
       if (countTime <= 0) {
-        clearInterval(this.intervalId)
-        const time = this.getTimeComponents(0)
-        updateClockface(time)
+        clearInterval(this.intervalId);
+        const time = this.getTimeComponents(0);
+        updateClockface(time);
       }
-     
+    });
+
+    this.intervalId = setInterval(() => {
+      const currentTime = Date.now();
+      const countTime = startTime - currentTime;
+      const time = this.getTimeComponents(countTime);
+      updateClockface(time);
+
+      if (countTime <= 0) {
+        clearInterval(this.intervalId);
+        const time = this.getTimeComponents(0);
+        updateClockface(time);
+      }
     }, 1000);
-  
   }
 
-    getTimeComponents(time) {
-
+  getTimeComponents(time) {
     const days = this.pad(Math.floor(time / (1000 * 60 * 60 * 24)));
-    const hours = this.pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    const hours = this.pad(
+      Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    );
     const mins = this.pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
     const secs = this.pad(Math.floor((time % (1000 * 60)) / 1000));
-      
-      return {days, hours, mins, secs}
-      }
-  
+
+    return { days, hours, mins, secs };
+  }
+
   /*
    * Принимает число, приводит к строке и добавляет в начало 0 если число меньше 2-х знаков
    */
@@ -51,20 +61,18 @@ countTimer() {
   }
 }
 
-
 const timer = new CountdownTimer({
   selector: '#timer-1',
   targetDate: new Date('Jan 01, 2021'),
   //targetDate: new Date('Oct 25, 2020'),
-
 });
 
-timer.countTimer()
+timer.countTimer();
 
-function updateClockface({days, hours, mins, secs}) {
-  refs.days.textContent = days; 
-  refs.hours.textContent = hours; 
-  refs.mins.textContent = mins; 
-  refs.secs.textContent = secs; 
-  return `${days}:${hours}:${mins}:${secs}`
+function updateClockface({ days, hours, mins, secs }) {
+  refs.days.textContent = days;
+  refs.hours.textContent = hours;
+  refs.mins.textContent = mins;
+  refs.secs.textContent = secs;
+  return `${days}:${hours}:${mins}:${secs}`;
 }
